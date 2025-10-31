@@ -1,1 +1,3 @@
 Mall_Customers.csv
+.venv/
+__pycache__/

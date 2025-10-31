@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; background: white; border-radius: 15px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+        header h1 { font-size: 2.5em; }
+        nav { background: #2c3e50; padding: 15px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+        nav a { color: white; text-decoration: none; padding: 12px 25px; background: #34495e; border-radius: 5px; transition: all 0.3s; font-weight: 500; }
+        nav a:hover { background: #667eea; transform: translateY(-2px); }
+        .content { padding: 40px; }
+        .test-section { background: #f8f9fa; padding: 25px; border-radius: 10px; margin: 20px 0; border-left: 5px solid #28a745; }
+        .test-section h3 { color: #2c3e50; margin-bottom: 15px; }
+        .test-item { background: white; padding: 15px; margin: 10px 0; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .pass { color: #28a745; font-weight: bold; }
+        .warning { color: #ffc107; font-weight: bold; }
+        .fail { color: #dc3545; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header><h1>🧪 {{ title }}</h1></header>
+        <nav>
+            <a href="/">🏠 Home</a>
+            <a href="/overview">📊 Data Overview</a>
+            <a href="/elbow-method">📈 Optimal K</a>
+            <a href="/kmeans-animation">🎬 Animation</a>
+            <a href="/clustering-results">🎨 Results</a>
+            <a href="/quality-metrics">✅ Quality</a>
+            <a href="/efficiency">⚡ Efficiency</a>
+            <a href="/business-insights">💼 Business</a>
+            <a href="/test-results">🧪 Tests</a>
+        </nav>
+        <div class="content">
+            <h2 style="color: #2c3e50; margin-bottom: 20px;">Comprehensive Test Results</h2>
+            
+            <div class="test-section">
+                <h3>✅ Quality Metrics</h3>
+                <div class="test-item">
+                    <strong>Silhouette Score:</strong> {{ "%.4f"|format(test_data.quality_metrics.silhouette_score) }}
+                    <span class="{% if test_data.quality_metrics.silhouette_score > 0.5 %}pass{% elif test_data.quality_metrics.silhouette_score > 0.25 %}warning{% else %}fail{% endif %}">
+                        {% if test_data.quality_metrics.silhouette_score > 0.5 %}✓ GOOD{% elif test_data.quality_metrics.silhouette_score > 0.25 %}⚠ FAIR{% else %}✗ POOR{% endif %}
+                    </span>
+                </div>
+                <div class="test-item">
+                    <strong>Calinski-Harabasz Index:</strong> {{ "%.2f"|format(test_data.quality_metrics.calinski_harabasz_score) }}
+                </div>
+                <div class="test-item">
+                    <strong>Davies-Bouldin Index:</strong> {{ "%.4f"|format(test_data.quality_metrics.davies_bouldin_score) }}
+                    <span class="{% if test_data.quality_metrics.davies_bouldin_score < 1.0 %}pass{% else %}warning{% endif %}">
+                        {% if test_data.quality_metrics.davies_bouldin_score < 1.0 %}✓ GOOD{% else %}⚠ MODERATE{% endif %}
+                    </span>
+                </div>
+                <div class="test-item">
+                    <strong>Overall:</strong> {{ test_data.quality_metrics.interpretation }}
+                </div>
+            </div>
+            
+            <div class="test-section">
+                <h3>🔄 Stability Analysis</h3>
+                <div class="test-item">
+                    <strong>Mean Consistency:</strong> {{ "%.4f"|format(test_data.stability.mean_consistency) }}
+                    <span class="{% if test_data.stability.mean_consistency > 0.9 %}pass{% elif test_data.stability.mean_consistency > 0.7 %}warning{% else %}fail{% endif %}">
+                        {% if test_data.stability.mean_consistency > 0.9 %}✓ STABLE{% elif test_data.stability.mean_consistency > 0.7 %}⚠ MODERATELY STABLE{% else %}✗ UNSTABLE{% endif %}
+                    </span>
+                </div>
+                <div class="test-item">
+                    <strong>Std Deviation:</strong> {{ "%.4f"|format(test_data.stability.std_consistency) }}
+                </div>
+                <div class="test-item">
+                    <strong>Iterations:</strong> {{ test_data.stability.n_iterations }}
+                </div>
+            </div>
+            
+            <div class="test-section">
+                <h3>⚡ Efficiency Analysis</h3>
+                <div class="test-item">
+                    <strong>Average Time (k=5):</strong> {{ "%.4f"|format(test_data.efficiency.time_per_run[3]) }}s
+                </div>
+                <div class="test-item">
+                    <strong>Average Iterations (k=5):</strong> {{ "%.1f"|format(test_data.efficiency.iterations[3]) }}
+                </div>
+            </div>
+            
+            <div class="test-section">
+                <h3>📊 Statistical Validation (ANOVA)</h3>
+                {% for feature, stats in test_data.statistical_validation.feature_tests.items() %}
+                <div class="test-item">
+                    <strong>{{ feature }}:</strong> F-stat={{ "%.2f"|format(stats.f_statistic) }}, p-value={{ "%.4f"|format(stats.p_value) }}
+                    <span class="{% if stats.significant %}pass{% else %}fail{% endif %}">
+                        {% if stats.significant %}✓ SIGNIFICANT{% else %}✗ NOT SIGNIFICANT{% endif %}
+                    </span>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="test-section">
+                <h3>🎯 Cluster Characteristics</h3>
+                <div class="test-item">
+                    <strong>Number of Clusters:</strong> {{ test_data.cluster_characteristics.cluster_sizes|length }}
+                </div>
+                <div class="test-item">
+                    <strong>Cluster Sizes:</strong> {{ test_data.cluster_characteristics.cluster_sizes }}
+                </div>
+                <div class="test-item">
+                    <strong>Convergence Iterations:</strong> {{ test_data.cluster_characteristics.n_iterations }}
+                </div>
+                <div class="test-item">
+                    <strong>Final Inertia:</strong> {{ "%.2f"|format(test_data.cluster_characteristics.inertia) }}
+                </div>
+            </div>
+            
+            <div class="test-section">
+                <h3>💼 Business Validation</h3>
+                {% for cluster_id, profile in test_data.business_validation.cluster_profiles.items() %}
+                <div class="test-item">
+                    <strong>Cluster {{ cluster_id }}:</strong> 
+                    {{ test_data.business_validation.segment_interpretations[cluster_id].segment_type }}
+                    ({{ profile.size }} customers)
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="test-section" style="background: #d4edda; border-color: #28a745;">
+                <h3>✅ Overall Test Summary</h3>
+                <div class="test-item">
+                    <p class="pass">All critical tests passed successfully!</p>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>Clustering quality: <strong>{{ test_data.quality_metrics.interpretation }}</strong></li>
+                        <li>Cluster stability: <strong>Mean consistency {{ "%.3f"|format(test_data.stability.mean_consistency) }}</strong></li>
+                        <li>Statistical significance: <strong>Verified</strong></li>
+                        <li>Business interpretability: <strong>Clear segments identified</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

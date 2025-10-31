@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1600px; margin: 0 auto; background: white; border-radius: 15px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+        header h1 { font-size: 2.5em; }
+        nav { background: #2c3e50; padding: 15px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+        nav a { color: white; text-decoration: none; padding: 12px 25px; background: #34495e; border-radius: 5px; transition: all 0.3s; font-weight: 500; }
+        nav a:hover { background: #667eea; transform: translateY(-2px); }
+        .content { padding: 40px; }
+        .metrics-box { background: #e7f3ff; padding: 25px; border-radius: 10px; margin: 20px 0; border-left: 5px solid #667eea; }
+        .metrics-box h3 { color: #2c3e50; margin-bottom: 15px; }
+        .metric-item { margin: 10px 0; font-size: 1.1em; }
+        .plot-container { margin: 30px 0; padding: 20px; background: #f8f9fa; border-radius: 10px; }
+        h2 { margin: 30px 0 20px 0; color: #2c3e50; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header><h1>✅ {{ title }}</h1></header>
+        <nav>
+            <a href="/">🏠 Home</a>
+            <a href="/overview">📊 Data Overview</a>
+            <a href="/elbow-method">📈 Optimal K</a>
+            <a href="/kmeans-animation">🎬 Animation</a>
+            <a href="/clustering-results">🎨 Results</a>
+            <a href="/quality-metrics">✅ Quality</a>
+            <a href="/efficiency">⚡ Efficiency</a>
+            <a href="/business-insights">💼 Business</a>
+            <a href="/test-results">🧪 Tests</a>
+        </nav>
+        <div class="content">
+            <div class="metrics-box">
+                <h3>Clustering Quality Metrics</h3>
+                <div class="metric-item"><strong>Silhouette Score:</strong> {{ "%.4f"|format(quality_metrics.silhouette_score) }}</div>
+                <div class="metric-item"><strong>Calinski-Harabasz Index:</strong> {{ "%.2f"|format(quality_metrics.calinski_harabasz_score) }}</div>
+                <div class="metric-item"><strong>Davies-Bouldin Index:</strong> {{ "%.4f"|format(quality_metrics.davies_bouldin_score) }}</div>
+                <div class="metric-item"><strong>Interpretation:</strong> {{ quality_metrics.interpretation }}</div>
+            </div>
+            
+            <h2>Silhouette Analysis</h2>
+            <div class="plot-container">{{ silhouette_plot|safe }}</div>
+            
+            <h2>Cluster Characteristics</h2>
+            <div class="plot-container">{{ characteristics_plot|safe }}</div>
+            
+            <h2>Statistical Validation</h2>
+            <div class="plot-container">{{ statistical_plot|safe }}</div>
+            
+            <h2>Cluster Stability</h2>
+            <div class="plot-container">{{ stability_plot|safe }}</div>
+        </div>
+    </div>
+</body>
+</html>
