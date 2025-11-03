@@ -93,9 +93,6 @@ async def home(request: Request):
     plot_2d_income_spending = create_2d_cluster_plot(
         df, "Annual Income (k$)", "Spending Score (1-100)", centroids=centroids
     )
-    plot_2d_income_age = create_2d_cluster_plot(
-        df, "Annual Income (k$)", "Age", centroids=centroids
-    )
     plot_3d = create_3d_cluster_plot(df)
     plot_pca = create_pca_plot(
         analysis_results["pca"], analysis_results["clustering"]["labels"]
@@ -130,13 +127,17 @@ async def home(request: Request):
         execution_time = efficiency_data["time_per_run"][k_index]
         n_iterations = efficiency_data["iterations"][k_index]
     except (ValueError, IndexError):
-        execution_time = efficiency_data["time_per_run"][0] if efficiency_data["time_per_run"] else 0
-        n_iterations = efficiency_data["iterations"][0] if efficiency_data["iterations"] else 0
-    
+        execution_time = (
+            efficiency_data["time_per_run"][0] if efficiency_data["time_per_run"] else 0
+        )
+        n_iterations = (
+            efficiency_data["iterations"][0] if efficiency_data["iterations"] else 0
+        )
+
     efficiency_summary = {
         "execution_time": execution_time,
         "n_iterations": int(n_iterations),
-        "memory_usage": 0.0  # Placeholder
+        "memory_usage": 0.0,  # Placeholder
     }
 
     return templates.TemplateResponse(

@@ -185,6 +185,12 @@
             font-size: 1.05em;
             margin-bottom: 8px;
         }
+        
+        .animation-title {
+            font-size: 1em;
+            color: #34495e;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -233,13 +239,24 @@
             </div>
             <div class="info-box">
                 <h3>Algorithm Behavior</h3>
-                <p>The animation shows how K-Means iteratively refines cluster assignments and centroid positions until convergence. Watch how the algorithm minimizes the distance between points and their assigned centroids.</p>
+                <p>The animation shows how K-Means iteratively refines cluster assignments and centroid positions until convergence. How the algorithm minimizes the distance between points and their assigned centroids.</p>
             </div>
         </div>
         
         <!-- Clustering Results Section -->
         <div class="section" id="clustering">
             <h2 class="section-title">Clustering Results</h2>
+            
+            <h3 class="subsection-title">K-Means Clustering Animations</h3>
+            <div class="info-box">
+                <p>K-Means algorithm iteratively assigns data points to clusters and updates centroid positions until convergence.</p>
+            </div>
+            {% for key, animation_html in animations.items() %}
+            <div class="plot-container">
+                <h4 class="animation-title">{{ key.replace('_', ' ').title() }}</h4>
+                {{ animation_html|safe }}
+            </div>
+            {% endfor %}
             
             <h3 class="subsection-title">2D Cluster Visualization</h3>
             <div class="plot-container">
