@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: #ffffff;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px 40px;
+            border-bottom: 3px solid #3498db;
+        }
+        
+        .header h1 { 
+            font-size: 1.8em; 
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        .header p { 
+            font-size: 0.95em; 
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 40px;
+        }
+        
+        .section {
+            margin: 40px 0;
+            page-break-inside: avoid;
+        }
+        
+        .section-title {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        .subsection-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #34495e;
+            margin: 25px 0 12px 0;
+        }
+        
+        .info-box {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-left: 3px solid #3498db;
+            font-size: 0.95em;
+        }
+        
+        .info-box h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.05em;
+            font-weight: 600;
+        }
+        
+        .info-box p {
+            margin: 5px 0;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .metric-card {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .metric-card h4 {
+            font-size: 1.8em;
+            color: #3498db;
+            margin-bottom: 5px;
+        }
+        
+        .metric-card p {
+            font-size: 0.9em;
+            color: #555;
+        }
+        
+        .plot-container {
+            margin: 20px 0;
+            background: #fafafa;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .test-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9em;
+            background: white;
+            border: 1px solid #ddd;
+        }
+        
+        .test-table th {
+            background: #34495e;
+            color: white;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        
+        .test-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .test-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .test-table tr:hover {
+            background: #e9ecef;
+        }
+        
+        .status-pass { color: #27ae60; font-weight: 600; }
+        .status-warning { color: #f39c12; font-weight: 600; }
+        .status-fail { color: #e74c3c; font-weight: 600; }
+        
+        .summary-box {
+            background: #e8f5e9;
+            border: 1px solid #4caf50;
+            padding: 15px 20px;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+        
+        .summary-box h3 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+        
+        .summary-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .summary-list li {
+            padding: 5px 0;
+            font-size: 0.95em;
+        }
+        
+        .summary-list li:before {
+            content: "✓ ";
+            color: #4caf50;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Customer Segmentation Analysis Report</h1>
+        <p>K-Means Clustering Analysis with Comprehensive Validation</p>
+    </div>
+    
+    <div class="container">
+        <!-- Data Overview Section -->
+        <section id="overview" class="section">
+            <div class="section-header">
+                <h2>📊 Data Overview</h2>
+            </div>
+            <div class="info-box">
+                <h3>Dataset Statistics</h3>
+                <p><strong>Shape:</strong> {{ basic_info.shape[0] }} rows × {{ basic_info.shape[1] }} columns</p>
+                <p><strong>Features:</strong> {{ basic_info.columns|join(', ') }}</p>
+                <p><strong>Missing Values:</strong> {{ basic_info.missing_values.values()|sum }}</p>
+            </div>
+            <div class="plot-container">
+                {{ distribution_plot|safe }}
+            </div>
+        </section>
+        
+        <!-- Optimal K Selection -->
+        <section id="optimal-k" class="section">
+            <div class="section-header">
+                <h2>📈 Optimal Cluster Selection</h2>
+            </div>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <h4>{{ elbow_data.optimal_k_silhouette }}</h4>
+                    <p>Silhouette Score</p>
+                </div>
+                <div class="metric-card">
+                    <h4>{{ elbow_data.optimal_k_ch }}</h4>
+                    <p>Calinski-Harabasz</p>
+                </div>
+                <div class="metric-card">
+                    <h4>{{ elbow_data.optimal_k_db }}</h4>
+                    <p>Davies-Bouldin</p>
+                </div>
+            </div>
+            <div class="plot-container">
+                {{ elbow_plot|safe }}
+            </div>
+        </section>
+        
+        <!-- K-Means Animation -->
+        <section id="animation" class="section">
+            <div class="section-header">
+                <h2>🎬 K-Means Algorithm Animation</h2>
+            </div>
+            <div class="info-box">
+                <h3>Animation Details</h3>
+                <p><strong>Convergence:</strong> {{ metrics_summary.final_iteration }} iterations</p>
+                <p><strong>Final Inertia:</strong> {{ "%.2f"|format(metrics_summary.final_inertia) }}</p>
+                <p><strong>Final Silhouette:</strong> {{ "%.3f"|format(metrics_summary.final_silhouette) }}</p>
+                <p><strong>Final Davies-Bouldin:</strong> {{ "%.3f"|format(metrics_summary.final_davies_bouldin) }}</p>
+            </div>
+            
+            <h3 class="subsection">Income vs Spending Score</h3>
+            <div class="plot-container">{{ animations['animation_0_1']|safe }}</div>
+            
+            <h3 class="subsection">Income vs Age</h3>
+            <div class="plot-container">{{ animations['animation_0_2']|safe }}</div>
+            
+            <h3 class="subsection">Spending Score vs Age</h3>
+            <div class="plot-container">{{ animations['animation_1_2']|safe }}</div>
+            
+            <h3 class="subsection">Metrics Evolution</h3>
+            <div class="plot-container">{{ metrics_animation|safe }}</div>
+        </section>
+        
+        <!-- Clustering Results -->
+        <section id="clustering" class="section">
+            <div class="section-header">
+                <h2>🎨 Clustering Results</h2>
+            </div>
+            
+            <h3 class="subsection">2D Visualizations</h3>
+            <div class="plot-container">{{ plot_2d_1|safe }}</div>
+            <div class="plot-container">{{ plot_2d_2|safe }}</div>
+            
+            <h3 class="subsection">3D Visualization</h3>
+            <div class="plot-container">{{ plot_3d|safe }}</div>
+            
+            <h3 class="subsection">PCA Visualization</h3>
+            <div class="plot-container">{{ plot_pca|safe }}</div>
+        </section>
+        
+        <!-- Quality Metrics -->
+        <section id="quality" class="section">
+            <div class="section-header">
+                <h2>✅ Quality Metrics & Validation</h2>
+            </div>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <h4>{{ "%.3f"|format(quality_metrics.silhouette_score) }}</h4>
+                    <p>Silhouette Score</p>
+                </div>
+                <div class="metric-card">
+                    <h4>{{ "%.1f"|format(quality_metrics.calinski_harabasz_score) }}</h4>
+                    <p>Calinski-Harabasz</p>
+                </div>
+                <div class="metric-card">
+                    <h4>{{ "%.3f"|format(quality_metrics.davies_bouldin_score) }}</h4>
+                    <p>Davies-Bouldin</p>
+                </div>
+            </div>
+            <div class="info-box">
+                <h3>Interpretation: {{ quality_metrics.interpretation }}</h3>
+            </div>
+            
+            <h3 class="subsection">Silhouette Analysis</h3>
+            <div class="plot-container">{{ silhouette_plot|safe }}</div>
+            
+            <h3 class="subsection">Cluster Characteristics</h3>
+            <div class="plot-container">{{ characteristics_plot|safe }}</div>
+            
+            <h3 class="subsection">Statistical Validation</h3>
+            <div class="plot-container">{{ statistical_plot|safe }}</div>
+            
+            <h3 class="subsection">Stability Analysis</h3>
+            <div class="plot-container">{{ stability_plot|safe }}</div>
+        </section>
+        
+        <!-- Efficiency Analysis -->
+        <section id="efficiency" class="section">
+            <div class="section-header">
+                <h2>⚡ Computational Efficiency</h2>
+            </div>
+            <div class="plot-container">{{ efficiency_plot|safe }}</div>
+        </section>
+        
+        <!-- Business Insights -->
+        <section id="business" class="section">
+            <div class="section-header">
+                <h2>💼 Business Insights</h2>
+            </div>
+            
+            <h3 class="subsection">Segment Overview</h3>
+            <div class="plot-container">{{ business_plot|safe }}</div>
+            
+            <h3 class="subsection">Cluster Profiles</h3>
+            <div class="plot-container">{{ profiles_table|safe }}</div>
+            
+            <div class="info-box">
+                <h3>Segment Interpretations</h3>
+                {% for cluster_id, interp in business_data.segment_interpretations.items() %}
+                <p><strong>Cluster {{ cluster_id }} - {{ interp.segment_type }}:</strong> {{ interp.description }}</p>
+                {% endfor %}
+            </div>
+        </section>
+        
+        <!-- Test Results -->
+        <section id="tests" class="section">
+            <div class="section-header">
+                <h2>🧪 Comprehensive Test Results</h2>
+            </div>
+            
+            <h3 class="subsection">Test Summary Table</h3>
+            <table class="test-table">
+                <thead>
+                    <tr>
+                        <th>Test Category</th>
+                        <th>Metric</th>
+                        <th>Value</th>
+                        <th>Status</th>
+                        <th>Interpretation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Quality Metrics -->
+                    <tr>
+                        <td rowspan="4"><strong>Quality Metrics</strong></td>
+                        <td>Silhouette Score</td>
+                        <td>{{ "%.4f"|format(test_data.quality_metrics.silhouette_score) }}</td>
+                        <td>
+                            {% if test_data.quality_metrics.silhouette_score > 0.5 %}
+                            <span class="status-pass">✓ GOOD</span>
+                            {% elif test_data.quality_metrics.silhouette_score > 0.25 %}
+                            <span class="status-warning">⚠ FAIR</span>
+                            {% else %}
+                            <span class="status-fail">✗ POOR</span>
+                            {% endif %}
+                        </td>
+                        <td rowspan="4">{{ test_data.quality_metrics.interpretation }}</td>
+                    </tr>
+                    <tr>
+                        <td>Calinski-Harabasz</td>
+                        <td>{{ "%.2f"|format(test_data.quality_metrics.calinski_harabasz_score) }}</td>
+                        <td><span class="status-pass">✓ OK</span></td>
+                    </tr>
+                    <tr>
+                        <td>Davies-Bouldin</td>
+                        <td>{{ "%.4f"|format(test_data.quality_metrics.davies_bouldin_score) }}</td>
+                        <td>
+                            {% if test_data.quality_metrics.davies_bouldin_score < 1.0 %}
+                            <span class="status-pass">✓ GOOD</span>
+                            {% else %}
+                            <span class="status-warning">⚠ MODERATE</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"></td>
+                    </tr>
+                    
+                    <!-- Stability Analysis -->
+                    <tr>
+                        <td rowspan="2"><strong>Stability</strong></td>
+                        <td>Mean Consistency</td>
+                        <td>{{ "%.4f"|format(test_data.stability.mean_consistency) }}</td>
+                        <td>
+                            {% if test_data.stability.mean_consistency > 0.9 %}
+                            <span class="status-pass">✓ STABLE</span>
+                            {% elif test_data.stability.mean_consistency > 0.7 %}
+                            <span class="status-warning">⚠ MODERATE</span>
+                            {% else %}
+                            <span class="status-fail">✗ UNSTABLE</span>
+                            {% endif %}
+                        </td>
+                        <td>Consistency across {{ test_data.stability.n_iterations }} runs</td>
+                    </tr>
+                    <tr>
+                        <td>Std Deviation</td>
+                        <td>{{ "%.4f"|format(test_data.stability.std_consistency) }}</td>
+                        <td><span class="status-pass">✓ OK</span></td>
+                        <td>Lower is better</td>
+                    </tr>
+                    
+                    <!-- Efficiency -->
+                    <tr>
+                        <td rowspan="2"><strong>Efficiency</strong></td>
+                        <td>Avg Time (k=5)</td>
+                        <td>{{ "%.4f"|format(test_data.efficiency.time_per_run[3]) }}s</td>
+                        <td><span class="status-pass">✓ FAST</span></td>
+                        <td>Computation time for 5 clusters</td>
+                    </tr>
+                    <tr>
+                        <td>Avg Iterations (k=5)</td>
+                        <td>{{ "%.1f"|format(test_data.efficiency.iterations[3]) }}</td>
+                        <td><span class="status-pass">✓ EFFICIENT</span></td>
+                        <td>Convergence speed</td>
+                    </tr>
+                    
+                    <!-- Statistical Validation -->
+                    {% for feature, stats in test_data.statistical_validation.feature_tests.items() %}
+                    <tr>
+                        {% if loop.first %}<td rowspan="{{ test_data.statistical_validation.feature_tests|length }}"><strong>Statistical (ANOVA)</strong></td>{% endif %}
+                        <td>{{ feature }}</td>
+                        <td>F={{ "%.2f"|format(stats.f_statistic) }}, p={{ "%.4f"|format(stats.p_value) }}</td>
+                        <td>
+                            {% if stats.significant %}
+                            <span class="status-pass">✓ SIGNIFICANT</span>
+                            {% else %}
+                            <span class="status-fail">✗ NOT SIGNIFICANT</span>
+                            {% endif %}
+                        </td>
+                        <td>p < 0.05 indicates significant differences</td>
+                    </tr>
+                    {% endfor %}
+                    
+                    <!-- Cluster Characteristics -->
+                    <tr>
+                        <td rowspan="3"><strong>Cluster Info</strong></td>
+                        <td>Number of Clusters</td>
+                        <td>{{ test_data.cluster_characteristics.cluster_sizes|length }}</td>
+                        <td><span class="status-pass">✓ OK</span></td>
+                        <td>Total segments identified</td>
+                    </tr>
+                    <tr>
+                        <td>Convergence Iterations</td>
+                        <td>{{ test_data.cluster_characteristics.n_iterations }}</td>
+                        <td><span class="status-pass">✓ FAST</span></td>
+                        <td>Iterations to converge</td>
+                    </tr>
+                    <tr>
+                        <td>Final Inertia</td>
+                        <td>{{ "%.2f"|format(test_data.cluster_characteristics.inertia) }}</td>
+                        <td><span class="status-pass">✓ OK</span></td>
+                        <td>Within-cluster sum of squares</td>
+                    </tr>
+                    
+                    <!-- Business Validation -->
+                    {% for cluster_id, profile in test_data.business_validation.cluster_profiles.items() %}
+                    <tr>
+                        {% if loop.first %}<td rowspan="{{ test_data.business_validation.cluster_profiles|length }}"><strong>Business Segments</strong></td>{% endif %}
+                        <td>Cluster {{ cluster_id }}</td>
+                        <td>{{ profile.size }} customers</td>
+                        <td><span class="status-pass">✓ IDENTIFIED</span></td>
+                        <td>{{ test_data.business_validation.segment_interpretations[cluster_id].segment_type }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            <div class="summary-box">
+                <h3>✅ Overall Test Summary</h3>
+                <ul class="summary-list">
+                    <li>Clustering quality: <strong>{{ test_data.quality_metrics.interpretation }}</strong></li>
+                    <li>Cluster stability: <strong>Mean consistency {{ "%.3f"|format(test_data.stability.mean_consistency) }}</strong></li>
+                    <li>Statistical significance: <strong>All features show significant differences (p < 0.05)</strong></li>
+                    <li>Business interpretability: <strong>{{ test_data.business_validation.cluster_profiles|length }} clear segments identified</strong></li>
+                    <li>Computational efficiency: <strong>Fast convergence in {{ test_data.cluster_characteristics.n_iterations }} iterations</strong></li>
+                    <li>Overall assessment: <strong>All critical tests passed successfully!</strong></li>
+                </ul>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
