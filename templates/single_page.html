@@ -272,11 +272,11 @@
                     <p>Silhouette Score</p>
                 </div>
                 <div class="metric-card">
-                    <h4>{{ "%.3f"|format(quality_metrics.calinski_harabasz) }}</h4>
+                    <h4>{{ "%.3f"|format(quality_metrics.calinski_harabasz_score) }}</h4>
                     <p>Calinski-Harabasz</p>
                 </div>
                 <div class="metric-card">
-                    <h4>{{ "%.3f"|format(quality_metrics.davies_bouldin) }}</h4>
+                    <h4>{{ "%.3f"|format(quality_metrics.davies_bouldin_score) }}</h4>
                     <p>Davies-Bouldin</p>
                 </div>
             </div>
@@ -367,17 +367,17 @@
                     </tr>
                     <tr>
                         <td>Calinski-Harabasz</td>
-                        <td>{{ "%.2f"|format(quality_metrics.calinski_harabasz) }}</td>
-                        <td><span class="{% if quality_metrics.calinski_harabasz > 100 %}status-pass{% else %}status-warning{% endif %}">
-                            {% if quality_metrics.calinski_harabasz > 100 %}PASS{% else %}WARNING{% endif %}
+                        <td>{{ "%.2f"|format(quality_metrics.calinski_harabasz_score) }}</td>
+                        <td><span class="{% if quality_metrics.calinski_harabasz_score > 100 %}status-pass{% else %}status-warning{% endif %}">
+                            {% if quality_metrics.calinski_harabasz_score > 100 %}PASS{% else %}WARNING{% endif %}
                         </span></td>
                         <td>Variance ratio criterion (target: >100)</td>
                     </tr>
                     <tr>
                         <td>Davies-Bouldin</td>
-                        <td>{{ "%.3f"|format(quality_metrics.davies_bouldin) }}</td>
-                        <td><span class="{% if quality_metrics.davies_bouldin < 1.0 %}status-pass{% else %}status-warning{% endif %}">
-                            {% if quality_metrics.davies_bouldin < 1.0 %}PASS{% else %}WARNING{% endif %}
+                        <td>{{ "%.3f"|format(quality_metrics.davies_bouldin_score) }}</td>
+                        <td><span class="{% if quality_metrics.davies_bouldin_score < 1.0 %}status-pass{% else %}status-warning{% endif %}">
+                            {% if quality_metrics.davies_bouldin_score < 1.0 %}PASS{% else %}WARNING{% endif %}
                         </span></td>
                         <td>Cluster similarity (target: <1.0)</td>
                     </tr>
@@ -386,9 +386,9 @@
                     <tr>
                         <td>Stability</td>
                         <td>ARI Stability</td>
-                        <td>{{ "%.3f"|format(stability_metrics.mean_ari) }}</td>
-                        <td><span class="{% if stability_metrics.mean_ari > 0.8 %}status-pass{% elif stability_metrics.mean_ari > 0.6 %}status-warning{% else %}status-fail{% endif %}">
-                            {% if stability_metrics.mean_ari > 0.8 %}PASS{% elif stability_metrics.mean_ari > 0.6 %}WARNING{% else %}FAIL{% endif %}
+                        <td>{{ "%.3f"|format(stability_metrics.mean_consistency) }}</td>
+                        <td><span class="{% if stability_metrics.mean_consistency > 0.8 %}status-pass{% elif stability_metrics.mean_consistency > 0.6 %}status-warning{% else %}status-fail{% endif %}">
+                            {% if stability_metrics.mean_consistency > 0.8 %}PASS{% elif stability_metrics.mean_consistency > 0.6 %}WARNING{% else %}FAIL{% endif %}
                         </span></td>
                         <td>Clustering consistency (target: >0.8)</td>
                     </tr>
@@ -437,7 +437,7 @@
                 <ul class="summary-list">
                     <li>Successfully identified {{ optimal_k }} customer segments</li>
                     <li>High-quality clustering with silhouette score of {{ "%.3f"|format(quality_metrics.silhouette_score) }}</li>
-                    <li>Stable clustering solution (ARI: {{ "%.3f"|format(stability_metrics.mean_ari) }})</li>
+                    <li>Stable clustering solution (ARI: {{ "%.3f"|format(stability_metrics.mean_consistency) }})</li>
                     <li>Efficient execution in {{ "%.4f"|format(efficiency_metrics.execution_time) }} seconds</li>
                     <li>Statistically significant cluster separation validated</li>
                     <li>Business-actionable segments with clear characteristics</li>

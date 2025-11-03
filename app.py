@@ -122,14 +122,21 @@ async def home(request: Request):
         analysis_results["business_validation"]
     )
 
-    # Test results
-    test_data = {
-        "quality_metrics": analysis_results["quality_metrics"],
-        "stability": analysis_results["stability"],
-        "efficiency": analysis_results["efficiency"],
-        "statistical_validation": analysis_results["statistical_validation"],
-        "cluster_characteristics": analysis_results["cluster_characteristics"],
-        "business_validation": analysis_results["business_validation"],
+    # Get efficiency metrics for the optimal k
+    optimal_k = analysis_results["clustering"]["n_clusters"]
+    efficiency_data = analysis_results["efficiency"]
+    try:
+        k_index = efficiency_data["k"].index(optimal_k)
+        execution_time = efficiency_data["time_per_run"][k_index]
+        n_iterations = efficiency_data["iterations"][k_index]
+    except (ValueError, IndexError):
+        execution_time = efficiency_data["time_per_run"][0] if efficiency_data["time_per_run"] else 0
+        n_iterations = efficiency_data["iterations"][0] if efficiency_data["iterations"] else 0
+    
+    efficiency_summary = {
+        "execution_time": execution_time,
+        "n_iterations": int(n_iterations),
+        "memory_usage": 0.0  # Placeholder
     }
 
     return templates.TemplateResponse(
@@ -143,17 +150,19 @@ async def home(request: Request):
             ),
             "elbow_plot": elbow_plot.to_html(full_html=False, include_plotlyjs="cdn"),
             "elbow_data": analysis_results["elbow_method"],
+            "optimal_k": optimal_k,
             "animations": animation_htmls,
-            "metrics_animation": metrics_html,
+            "animation_2d": animation_htmls[0] if animation_htmls else "",
+            "animation_metrics": metrics_html,
             "metrics_summary": animation_results["metrics_summary"],
-            "plot_2d_1": plot_2d_income_spending.to_html(
+            "cluster_2d": plot_2d_income_spending.to_html(
                 full_html=False, include_plotlyjs="cdn"
             ),
-            "plot_2d_2": plot_2d_income_age.to_html(
+            "cluster_3d": plot_3d.to_html(full_html=False, include_plotlyjs="cdn"),
+            "pca_plot": plot_pca.to_html(full_html=False, include_plotlyjs="cdn"),
+            "cluster_profiles": profiles_table.to_html(
                 full_html=False, include_plotlyjs="cdn"
             ),
-            "plot_3d": plot_3d.to_html(full_html=False, include_plotlyjs="cdn"),
-            "plot_pca": plot_pca.to_html(full_html=False, include_plotlyjs="cdn"),
             "quality_metrics": analysis_results["quality_metrics"],
             "silhouette_plot": silhouette_plot.to_html(
                 full_html=False, include_plotlyjs="cdn"
@@ -167,17 +176,16 @@ async def home(request: Request):
             "stability_plot": stability_plot.to_html(
                 full_html=False, include_plotlyjs="cdn"
             ),
+            "stability_metrics": analysis_results["stability"],
+            "efficiency_metrics": efficiency_summary,
             "efficiency_plot": efficiency_plot.to_html(
                 full_html=False, include_plotlyjs="cdn"
             ),
-            "business_plot": business_plot.to_html(
+            "business_segments": business_plot.to_html(
                 full_html=False, include_plotlyjs="cdn"
             ),
-            "profiles_table": profiles_table.to_html(
-                full_html=False, include_plotlyjs="cdn"
-            ),
-            "business_data": analysis_results["business_validation"],
-            "test_data": test_data,
+            "business_analysis": analysis_results["business_validation"],
+            "statistical_validation": analysis_results["statistical_validation"],
         },
     )
 
