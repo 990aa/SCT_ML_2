@@ -152,7 +152,7 @@ async def home(request: Request):
             "elbow_data": analysis_results["elbow_method"],
             "optimal_k": optimal_k,
             "animations": animation_htmls,
-            "animation_2d": animation_htmls[0] if animation_htmls else "",
+            "animation_2d": animation_htmls.get("animation_1", ""),
             "animation_metrics": metrics_html,
             "metrics_summary": animation_results["metrics_summary"],
             "cluster_2d": plot_2d_income_spending.to_html(
