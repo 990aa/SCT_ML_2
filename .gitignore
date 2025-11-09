@@ -2,3 +2,4 @@ Mall_Customers.csv
 .venv/
 __pycache__/
 .ruff_cache/
+*.md

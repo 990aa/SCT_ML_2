@@ -2,7 +2,7 @@
 
 A comprehensive web-based dashboard for customer segmentation analysis using K-Means clustering, built with FastAPI, Plotly, and Scikit-learn.
 
-## 🌟 Features
+## Features
 
 - **Interactive Web Dashboard**: Beautiful, responsive UI with multiple pages for different analyses
 - **Animated K-Means Visualization**: Watch the clustering algorithm in action with step-by-step animations
@@ -18,12 +18,12 @@ A comprehensive web-based dashboard for customer segmentation analysis using K-M
 - **All Plotly Visualizations**: Every chart is interactive with zoom, pan, and hover capabilities
 - **Complete Test Results**: Comprehensive test suite results displayed on the dashboard
 
-## 📋 Requirements
+## Requirements
 
 - Python 3.10+
 - UV package manager
 
-## 🚀 Installation
+## Installation
 
 1. Clone the repository and navigate to the project directory:
 ```bash
@@ -39,7 +39,7 @@ This will automatically:
 - Create a virtual environment
 - Install all required packages (FastAPI, Uvicorn, Plotly, Pandas, NumPy, Scikit-learn, etc.)
 
-## 🎯 Running the Application
+## Running the Application
 
 Start the server using UV:
 ```bash
@@ -54,7 +54,7 @@ The server will:
 
 Open your browser and navigate to http://127.0.0.1:8000 to access the dashboard.
 
-## 📊 Dashboard Pages
+## Dashboard Pages
 
 ### 1. Home (`/`)
 Welcome page with feature overview and quick navigation
@@ -71,7 +71,7 @@ Welcome page with feature overview and quick navigation
 - Optimal K recommendations
 
 ### 4. K-Means Animation (`/kmeans-animation`)
-**⭐ Main Feature**: Interactive animations showing:
+**Main Feature**: Interactive animations showing:
 - Step-by-step clustering process
 - Centroid movements at each iteration
 - Cluster assignments evolution
@@ -111,15 +111,15 @@ Welcome page with feature overview and quick navigation
 
 ### 9. Test Results (`/test-results`)
 **Complete test.py output** including:
-- ✅ Quality metrics validation
-- 🔄 Stability analysis results
-- ⚡ Efficiency measurements
-- 📊 Statistical significance tests
-- 🎯 Cluster characteristics
-- 💼 Business validation
+- Quality metrics validation
+- Stability analysis results
+- Efficiency measurements
+- Statistical significance tests
+- Cluster characteristics
+- Business validation
 - Overall test summary with pass/fail indicators
 
-## 🛠️ Project Structure
+## Project Structure
 
 ```
 customer_segmentation/
@@ -143,7 +143,7 @@ customer_segmentation/
 └── test.py                 # (Old file - not used)
 ```
 
-## 🎨 Technology Stack
+## Technology Stack
 
 - **Backend**: FastAPI (async web framework)
 - **Server**: Uvicorn (ASGI server)
@@ -153,7 +153,7 @@ customer_segmentation/
 - **Package Management**: UV (fast Python package installer)
 - **Templates**: Jinja2
 
-## 📈 Key Features Explained
+## Key Features Explained
 
 ### Animated K-Means Clustering
 The animation feature provides unique insights into how the algorithm works:
@@ -171,7 +171,7 @@ All test results from the original `test.py` are integrated into the dashboard:
 - Statistical validation (ANOVA tests for feature significance)
 - Business validation with segment interpretations
 
-## 🔧 API Endpoints
+## API Endpoints
 
 - `GET /`: Home page
 - `GET /overview`: Data overview
@@ -185,7 +185,7 @@ All test results from the original `test.py` are integrated into the dashboard:
 - `GET /api/analysis`: JSON API for analysis data
 - `GET /api/animation`: JSON API for animation metadata
 
-## 🎓 Learning Resources
+## Learning Resources
 
 This project demonstrates:
 - Modern Python web development with FastAPI
@@ -195,17 +195,15 @@ This project demonstrates:
 - Data analysis and business intelligence
 - Package management with UV
 
-## 📝 Notes
+## Notes
 
 - The analysis runs automatically on server startup (takes ~10-15 seconds)
 - All visualizations are interactive - you can zoom, pan, and hover
 - The animations use Play/Pause controls and a slider for step-by-step navigation
 - The server supports hot-reload (code changes automatically restart the server)
 
-## 🙏 Credits
+## Credits
 
 - Dataset: Mall Customers Dataset [https://www.kaggle.com/datasets/vjchoudhary7/customer-segmentation-tutorial-in-python/data]
 - Libraries: FastAPI, Plotly, Scikit-learn, Pandas, NumPy
 - Package Manager: UV (Astral)
-
-
